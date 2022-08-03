@@ -6,29 +6,29 @@ export const requests = new Counter('http_reqs');
 
 export const options = {
 
-  stages: [
-    { target: 1, duration: '30s' },
-    { target: 10, duration: '0s' },
-    { target: 10, duration: '30s' },
-    { target: 100, duration: '0s' },
-    { target: 100, duration: '30s' },
-    { target: 1000, duration: '0s' },
-    { target: 1000, duration: '30s' },
-  ],
+  // stages: [
+  //   { target: 1, duration: '30s' },
+  //   { target: 10, duration: '0s' },
+  //   { target: 10, duration: '30s' },
+  //   { target: 100, duration: '0s' },
+  //   { target: 100, duration: '30s' },
+  //   { target: 1000, duration: '0s' },
+  //   { target: 1000, duration: '30s' },
+  // ],
+  scenarios: {
+    constant_request_rate: {
+      executor: 'constant-arrival-rate',
+      rate: 1000,
+      timeUnit: '1s',
+      duration: '30s',
+      preAllocatedVUS: 1000,
+      maxVUs: 2000
+    }
+  },
+
   thresholds: {
     http_req_duration: ['avg<50'],
   },
-  // scenarios: {
-  //   constant_request_rate: {
-  //     executor: 'constant-arrival-rate',
-  //     rate: 1000,
-  //     timeUnit: '1s',
-  //     duration: '30s',
-  //     preAllocatedVUS: 1000,
-  //     maxVUs: 2000
-  //   }
-  // }
-
 };
 
 export default function productIdStressTest() {
