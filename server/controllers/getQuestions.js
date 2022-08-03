@@ -15,8 +15,9 @@ const getQuestions = (req, res) => {
     questions.asker_name,
     questions.question_helpfulness,
     questions.reported,
-    (SELECT (JSON_OBJECT_AGG(answers.id, JSON_BUILD_OBJECT( 'id', answers.id, 'body', answers.body, 'date', answers.answer_date, 'answerer_name', answers.answerer_name, 'helpfulness', answers.helpfulness, 'photos',
-    (SELECT (ARRAY_AGG(JSON_BUILD_OBJECT('id', photos.id, 'url', photos.url))) FROM photos WHERE answers.id = photos.answer_id))))
+    (SELECT (JSON_OBJECT_AGG(answers.id, JSON_BUILD_OBJECT( 'id', answers.id, 'body', answers.body, 'date', (TO_TIMESTAMP(answers.answer_date/1000)), 'answerer_name', answers.answerer_name, 'helpfulness', answers.helpfulness, 'photos',
+    (SELECT COALESCE(JSON_AGG(JSON_BUILD_OBJECT('id', photos.id, 'url', photos.url)), '[]'::json)
+    FROM photos WHERE answers.id = photos.answer_id))))
   FROM answers WHERE answers.question_id = questions.id)
   AS answers
   FROM questions
