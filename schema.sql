@@ -1,4 +1,3 @@
-
 CREATE TABLE IF NOT EXISTS questions (
   id SERIAL PRIMARY KEY,
   product_id INTEGER NOT NULL,
